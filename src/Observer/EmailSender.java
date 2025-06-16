@@ -7,7 +7,7 @@ public class EmailSender {
 
     public static void enviarCorreo(String destinatario, String asunto, String cuerpo) {
         final String remitente = "bruno.figueroa@usil.pe";
-        final String password = "T3csup5629.";
+        final String password = "";
 
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.office365.com"); // Servidor de Outlook
