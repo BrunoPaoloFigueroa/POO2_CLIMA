@@ -8,11 +8,14 @@ import java.awt.event.*;
 public class WeatherStationGUI extends JFrame {
     private WeatherData weatherData = new WeatherData();
     private JTextArea displayArea;
+    private JTextField alertField;
     private JSpinner tempSpinner, humSpinner, presSpinner, aqiSpinner;
+
+    private AlertSystem alertSystem; // Referencia para leer el estado de alerta
 
     public WeatherStationGUI() {
         setTitle("Estación Meteorológica - Patrón Observer");
-        setSize(600, 500);
+        setSize(600, 550);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
@@ -37,26 +40,33 @@ public class WeatherStationGUI extends JFrame {
 
         add(inputPanel, BorderLayout.NORTH);
 
-        // Área de visualización
+        // visualización
         displayArea = new JTextArea();
         displayArea.setEditable(false);
         add(new JScrollPane(displayArea), BorderLayout.CENTER);
 
-        // Botones para agregar observadores
-        JPanel buttonPanel = new JPanel(new GridLayout(5, 1));
+        // alerta
+        alertField = new JTextField("Sistema de alertas: Sin alertas.");
+        alertField.setEditable(false);
+        add(alertField, BorderLayout.SOUTH);
+
+        // Botones
+        JPanel buttonPanel = new JPanel(new GridLayout(4, 1));
         JButton addCurrent = new JButton("Agregar Condiciones Actuales");
         JButton addStats = new JButton("Agregar Estadísticas");
         JButton addForecast = new JButton("Agregar Pronóstico");
         JButton addAQI = new JButton("Agregar Calidad Aire");
-        JButton addAlerts = new JButton("Agregar Sistema Alertas");
 
         buttonPanel.add(addCurrent);
         buttonPanel.add(addStats);
         buttonPanel.add(addForecast);
         buttonPanel.add(addAQI);
-        buttonPanel.add(addAlerts);
 
         add(buttonPanel, BorderLayout.EAST);
+
+
+        alertSystem = new AlertSystem();
+        weatherData.registerObserver(alertSystem);
 
         // Listeners
         updateBtn.addActionListener(e -> {
@@ -66,13 +76,13 @@ public class WeatherStationGUI extends JFrame {
             int aqi = (Integer) aqiSpinner.getValue();
             weatherData.setMeasurements(t, h, p, aqi);
             mostrarDatos();
+            mostrarAlerta();
         });
 
         addCurrent.addActionListener(e -> weatherData.registerObserver(new CurrentConditionsDisplay()));
         addStats.addActionListener(e -> weatherData.registerObserver(new StatisticsDisplay()));
         addForecast.addActionListener(e -> weatherData.registerObserver(new ForecastDisplay()));
         addAQI.addActionListener(e -> weatherData.registerObserver(new AQIDisplay()));
-        addAlerts.addActionListener(e -> weatherData.registerObserver(new AlertSystem()));
     }
 
     private void mostrarDatos() {
@@ -83,5 +93,7 @@ public class WeatherStationGUI extends JFrame {
         displayArea.setText(sb.toString());
     }
 
-
+    private void mostrarAlerta() {
+        alertField.setText(alertSystem.getEstadoAlerta());
+    }
 }

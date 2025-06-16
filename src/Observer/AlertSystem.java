@@ -1,28 +1,40 @@
 package Observer;
 
 public class AlertSystem implements Observer {
-    private String alertas = "";
+    private String estadoAlerta = "Sin alertas.";
 
     @Override
-    public void update(float temperatura, float humedad, float presion, int aqi) {
-        StringBuilder sb = new StringBuilder();
-        if (temperatura > 35) sb.append("¡Alerta! Temperatura alta: " + temperatura + "°C\n");
-        if (humedad > 90) sb.append("¡Alerta! Humedad alta: " + humedad + "%\n");
-        if (aqi > 150) sb.append("¡Alerta! AQI elevado: " + aqi + "\n");
-        alertas = sb.toString();
+    public void update(float temperature, float humidity, float pressure, int aqi) {
+        StringBuilder alerta = new StringBuilder();
 
-        if (!alertas.isEmpty()) {
-            // ENVÍA CORREO
+        if (temperature > 35) {
+            alerta.append("¡ALERTA DE TEMPERATURA! Temperatura = ").append(temperature).append("°C\n");
+        }
+        if (humidity > 90) {
+            alerta.append("¡ALERTA DE HUMEDAD! Humedad = ").append(humidity).append("%\n");
+        }
+        if (aqi > 150) {
+            alerta.append("¡ALERTA DE CALIDAD DE AIRE! AQI = ").append(aqi).append("\n");
+        }
+
+        if (alerta.length() > 0) {
+            estadoAlerta = "¡ALERTA ACTIVADA! Se ha enviado un correo.";
             EmailSender.enviarCorreo(
-                    "bruno.figueroa@usil.pe", // cambia esto a tu correo destino real
-                    "🚨 Alerta de Estación Meteorológica",
-                    alertas
+                    "andre.zapata@usil.pe",
+                    "Alerta Meteorológica",
+                    alerta.toString()
             );
+        } else {
+            estadoAlerta = "Sin alertas.";
         }
     }
 
     @Override
     public String display() {
-        return alertas.isEmpty() ? "Sin alertas." : alertas;
+        return "";
+    }
+
+    public String getEstadoAlerta() {
+        return estadoAlerta;
     }
 }

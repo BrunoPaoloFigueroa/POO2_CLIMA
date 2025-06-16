@@ -14,10 +14,6 @@ public class WeatherData implements WeatherDataSubject {
         observers.add(o);
     }
 
-    @Override
-    public void removeObserver(Observer o) {
-        observers.remove(o);
-    }
 
     @Override
     public void notifyObservers() {

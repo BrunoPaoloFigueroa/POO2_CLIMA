@@ -4,6 +4,5 @@ import Observer.Observer;
 
 public interface WeatherDataSubject {
     void registerObserver(Observer o);
-    void removeObserver(Observer o);
     void notifyObservers();
 }
