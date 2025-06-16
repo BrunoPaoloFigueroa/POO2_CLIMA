@@ -88,7 +88,11 @@ public class WeatherStationGUI extends JFrame {
     private void mostrarDatos() {
         StringBuilder sb = new StringBuilder();
         for (Observer obs : weatherData.getObservers()) {
-            sb.append(obs.display()).append("\n\n");
+            if (!(obs instanceof AlertSystem)) {
+                sb.append(obs.display()).append("\n\n");
+            } else if (obs instanceof AlertSystem) {
+                alertField.setText(((AlertSystem) obs).getEstadoAlerta());
+            }
         }
         displayArea.setText(sb.toString());
     }

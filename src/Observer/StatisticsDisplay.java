@@ -1,20 +1,30 @@
 package Observer;
 
 public class StatisticsDisplay implements Observer {
-    private float max = Float.MIN_VALUE, min = Float.MAX_VALUE, sum = 0;
-    private int count = 0;
+    private float suma_temp = 0;
+    private int lecturas = 0;
+    private float maxTemp = Float.MIN_VALUE;
+    private float minTemp = Float.MAX_VALUE;
 
     @Override
-    public void update(float temperatura, float humedad, float presion, int aqi) {
-        sum += temperatura;
-        count++;
-        if (temperatura > max) max = temperatura;
-        if (temperatura < min) min = temperatura;
+    public void update(float temperature, float humidity, float pressure, int aqi) {
+        suma_temp += temperature;
+        lecturas++;
+
+        if (temperature > maxTemp) {
+            maxTemp = temperature;
+        }
+        if (temperature < minTemp) {
+            minTemp = temperature;
+        }
     }
 
     @Override
     public String display() {
-        if (count == 0) return "No hay datos suficientes";
-        return String.format("Prom: %.1f°C | Máx: %.1f°C | Mín: %.1f°C", sum / count, max, min);
+        float promedio = lecturas > 0 ? suma_temp / lecturas : 0;
+        return String.format(
+                "Estadísticas:\nPromedio Temp: %.2f°C\nMáxima Temp: %.2f°C\nMínima Temp: %.2f°C\n",
+                promedio, maxTemp, minTemp
+        );
     }
 }

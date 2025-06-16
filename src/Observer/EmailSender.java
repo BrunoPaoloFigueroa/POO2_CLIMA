@@ -1,6 +1,4 @@
 package Observer;
-
-
 import jakarta.mail.*;
 import jakarta.mail.internet.*;
 import java.util.Properties;
